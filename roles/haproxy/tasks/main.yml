@@ -1,9 +1,24 @@
 ---
+- name: Montar backends a partir do grupo de inventário
+  when: haproxy_backend_servers | default([]) | length == 0
+  ansible.builtin.set_fact:
+    haproxy_backend_servers: "{{ haproxy_backend_servers | default([]) + [{
+        'name': item,
+        'address': hostvars[item]['ansible_host'] | default(item),
+        'port': haproxy_backend_port | default(80)
+      }] }}"
+  loop: "{{ groups[haproxy_backend_group] | default([]) }}"
+  loop_control:
+    label: "{{ item }}"
+
 - name: Validar a lista de servidores de destino
   ansible.builtin.assert:
     that:
       - haproxy_backend_servers | length > 0
-    fail_msg: Defina pelo menos um servidor em haproxy_backend_servers.
+    fail_msg: >-
+      Nenhum backend encontrado. Defina haproxy_backend_servers ou
+      garanta que o grupo '{{ haproxy_backend_group }}' exista no inventário
+      com pelo menos um host (e ansible_host).
 
 - name: Instalar HAProxy
   ansible.builtin.package:

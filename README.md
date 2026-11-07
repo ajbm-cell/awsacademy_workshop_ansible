@@ -37,8 +37,11 @@ permissão de sudo nos três servidores. Use `--ask-become-pass` se o sudo exigi
 
 O `playbook.yml` aplica a role `webserver` somente ao grupo `webservers` e, em
 seguida, importa `playbook_haproxy.yml`, que aplica a role `haproxy` somente ao
-grupo `haproxy`. Os backends em `group_vars/haproxy.yml` usam os endereços de
-`web01` e `web02` definidos no inventário, com balanceamento `roundrobin`.
+grupo `haproxy`. Os backends são montados automaticamente a partir do grupo
+`haproxy_backend_group` (padrão: `webservers`), usando o `ansible_host`
+de cada membro. No AAP, se o grupo dos webservers tiver outro nome
+(ex.: `vinicius-g`), defina `haproxy_backend_group` nas variáveis do
+grupo do load balancer ou no Job Template.
 
 ## Estrutura
 
@@ -91,8 +94,9 @@ na configuração notificam seu handler de reinício. Cada backend possui uma
 verificação de disponibilidade TCP (`check`).
 
 As configurações deste laboratório estão em `group_vars/haproxy.yml`, que
-sobrescreve os defaults da role para usar um balanceador dedicado na porta 80.
-Timeouts, algoritmo e opção de configurar o firewall estão disponíveis em
+sobrescreve os defaults da role para usar um balanceador dedicado na porta 80
+e o grupo `webservers` como origem dos backends. Timeouts, algoritmo e
+opção de configurar o firewall estão disponíveis em
 `roles/haproxy/defaults/main.yml`.
 
 Em sistemas Red Hat com firewalld ativo, as roles liberam suas portas HTTP.

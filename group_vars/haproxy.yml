@@ -1,9 +1,4 @@
 ---
 haproxy_port: 80
-haproxy_backend_servers:
-  - name: web01
-    address: "{{ hostvars['web01']['ansible_host'] }}"
-    port: 80
-  - name: web02
-    address: "{{ hostvars['web02']['ansible_host'] }}"
-    port: 80
+haproxy_backend_group: webservers
+haproxy_backend_port: 80

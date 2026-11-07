@@ -8,10 +8,15 @@ haproxy_timeout_connect: 5s
 haproxy_timeout_client: 30s
 haproxy_timeout_server: 30s
 haproxy_firewall_configure: true
-haproxy_backend_servers:
-  - name: web01
-    address: "{{ hostvars['web01']['ansible_host'] }}"
-    port: 80
-  - name: web02
-    address: "{{ hostvars['web02']['ansible_host'] }}"
-    port: 80
+
+# Grupo de inventário cujos hosts viram backends do HAProxy.
+# No laboratório local: webservers. No AAP, use o nome do seu grupo
+# (ex.: vinicius-g) via group_vars ou variáveis do Job Template.
+haproxy_backend_group: webservers
+haproxy_backend_port: 80
+
+# Lista vazia = montar automaticamente a partir de haproxy_backend_group.
+# Para sobrescrever manualmente, use name/address/port sem hostvars hard-coded:
+#   haproxy_backend_servers:
+#     - { name: app1, address: 10.0.0.11, port: 80 }
+haproxy_backend_servers: []
