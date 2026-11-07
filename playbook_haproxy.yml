@@ -1,6 +1,6 @@
 ---
 - name: "Provisionar HAProxy - Workshop Red Hat Academy"
-  hosts: haproxy
+  hosts: alex_g_load_balancer
   become: true
   gather_facts: true
   roles:
