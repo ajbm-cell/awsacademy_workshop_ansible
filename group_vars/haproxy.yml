@@ -1,4 +1,4 @@
 ---
 haproxy_port: 80
-haproxy_backend_group: webservers
+haproxy_backend_group: alex_g_load_balancer
 haproxy_backend_port: 80
