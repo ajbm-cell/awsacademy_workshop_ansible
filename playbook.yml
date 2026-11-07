@@ -1,6 +1,6 @@
 ---
 - name: "Provisionar Servidor Web - Workshop Red Hat Academy"
-  hosts: webservers
+  hosts: alex_g
   become: true
   gather_facts: true
 
